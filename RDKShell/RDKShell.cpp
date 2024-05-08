@@ -5565,6 +5565,10 @@ namespace WPEFramework {
                     JsonObject destroyRequest, destroyResponse;
                     destroyRequest["callsign"] = "ResidentApp";
                     destroyWrapper(destroyRequest, destroyResponse);
+                    JsonObject destroySADRequest, destroySADResponse;
+                    destroySADRequest["callsign"] = "SearchAndDiscovery";
+                    destroyWrapper(destroySADRequest, destroySADResponse);
+
                 }
                 JsonObject launchRequest, configuration;
                 launchRequest["callsign"] = "factoryapp";
