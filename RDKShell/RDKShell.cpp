@@ -3894,6 +3894,12 @@ namespace WPEFramework {
                     returnResponse(false);
                 }
             }*/
+            if ((NOTLAUNCHED != sFactoryAppLaunchStatus) && ((appCallsign.compare("SearchAndDiscovery") == 0) || (appCallsign.compare("ResidentApp") == 0)))
+            {
+                std::cout << "factory app is already running, block SAD";
+                response["message"] = " factory app already running,block SAD";
+                result = false;
+            }
             if (result)
             {
                 appCallsign = parameters["callsign"].String();
