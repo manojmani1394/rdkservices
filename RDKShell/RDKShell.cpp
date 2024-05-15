@@ -3248,8 +3248,9 @@ namespace WPEFramework {
 
         uint32_t RDKShell::launchWrapper(const JsonObject& parameters, JsonObject& response)
         {
+            gLaunchMutex.lock();
             LOGINFOMETHOD();
-
+            
             double launchStartTime = RdkShell::seconds();
             bool result = true;
 	    bool autoDestroy = true;
@@ -3305,9 +3306,9 @@ namespace WPEFramework {
                 gLaunchDestroyMutex.unlock();
                 if (isApplicationBeingDestroyed)
                 {
-                    gLaunchMutex.lock();
+                    //gLaunchMutex.lock();
                     gLaunchCount = 0;
-                    gLaunchMutex.unlock();
+                    //gLaunchMutex.unlock();
                     response["message"] = "failed to launch application due to active destroy request";
                     returnResponse(false);
                 }
@@ -3461,9 +3462,9 @@ namespace WPEFramework {
 		if (!newPluginFound && !originalPluginFound)
                 {
                     response["message"] = "failed to launch application.  type not found";
-                    gLaunchMutex.lock();
+                    //gLaunchMutex.lock();
                     gLaunchCount = 0;
-                    gLaunchMutex.unlock();
+                    //gLaunchMutex.unlock();
 		    gLaunchDestroyMutex.lock();
                     gLaunchApplications.erase(appCallsign);
 		    gLaunchDestroyMutex.unlock();
@@ -3967,9 +3968,9 @@ namespace WPEFramework {
                             break;
                     }
                     std::cout << "Application:" << callsign << " took " << (RdkShell::seconds() - launchStartTime)*1000 << " milliseconds to launch " << std::endl;
-                    gLaunchMutex.lock();
+                    //gLaunchMutex.lock();
                     gLaunchCount = 0;
-                    gLaunchMutex.unlock();
+                    //gLaunchMutex.unlock();
                     if (setSuspendResumeStateOnLaunch && deferLaunch && ((launchType == SUSPEND) || (launchType == RESUME)))
                     {
                         std::cout << "deferring application launch " << std::endl;
@@ -3986,14 +3987,14 @@ namespace WPEFramework {
             {
                 response["message"] = "failed to launch application";
             }
-            gLaunchMutex.lock();
+            //gLaunchMutex.lock();
             gLaunchCount = 0;
-            gLaunchMutex.unlock();
+            
 	    gLaunchDestroyMutex.lock();
             gLaunchApplications.erase(appCallsign);
 	    gLaunchDestroyMutex.unlock();
             std::cout << "new launch count at loc2 is 0\n";
-
+            gLaunchMutex.unlock();
             returnResponse(result);
         }
 
