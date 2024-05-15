@@ -3894,6 +3894,7 @@ namespace WPEFramework {
                     returnResponse(false);
                 }
             }*/
+	    std::cout << "########  sFactoryAppLaunchStatus" << sFactoryAppLaunchStatus << std::endl;;	
             if ((NOTLAUNCHED != sFactoryAppLaunchStatus) && ((appCallsign.compare("SearchAndDiscovery") == 0) || (appCallsign.compare("ResidentApp") == 0)))
             {
                 std::cout << "factory app is already running, block SAD";
