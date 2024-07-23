@@ -202,8 +202,10 @@ static bool sRunning = true;
 bool needsScreenshot = false;
 sem_t gInitializeSemaphore;
 
+#ifdef RDKSHELL_READ_MAC_ON_STARTUP
 #ifdef RDKSHELL_DUAL_ODM_SUPPORT
 static Device_Mode_FactoryModes_t sFactoryMode = DEVICE_MODE_CVTE_B1_AGING;
+#endif
 #endif
 
 #ifdef HIBERNATE_SUPPORT_ENABLED
@@ -326,7 +328,7 @@ static bool checkFactoryMode_wrapper()
         }
         return ret;
 }
-#endif
+
 #ifdef RDKSHELL_DUAL_FTA_SUPPORT
 static bool checkAssemblyFactoryMode_wrapper()
 {
@@ -389,6 +391,7 @@ char* getFactoryAppUrl()
 #endif
 	return factoryAppUrl;
 }
+#endif
 #endif
 FactoryAppLaunchStatus sFactoryAppLaunchStatus = NOTLAUNCHED;
 
@@ -1982,9 +1985,11 @@ namespace WPEFramework {
                                 request["nokillresapp"] = "true";
                             }
                             request["resetagingtime"] = "true";
+			    #ifdef RDKSHELL_READ_MAC_ON_STARTUP
                             #ifdef RDKSHELL_DUAL_FTA_SUPPORT
                             request["factoryappstage"] = isAssemblyFactoryMode ? "assembly" : "mainboard" ;
                             #endif
+			    #endif
 		   	    RDKShellApiRequest apiRequest;
                             apiRequest.mName = "launchFactoryApp";
                             apiRequest.mRequest = request;
@@ -2044,8 +2049,10 @@ namespace WPEFramework {
                             request["nokillresapp"] = "true";
                         }
                         request["resetagingtime"] = "true";
+			#ifdef RDKSHELL_READ_MAC_ON_STARTUP
 			#ifdef RDKSHELL_DUAL_FTA_SUPPORT
 			request["factoryappstage"] = isAssemblyFactoryMode ? "assembly" : "mainboard" ;
+			#endif
 			#endif
 			RDKShellApiRequest apiRequest;
                         apiRequest.mName = "launchFactoryApp";
@@ -5791,6 +5798,7 @@ namespace WPEFramework {
                     }
                 }
             }
+	    #ifdef RDKSHELL_READ_MAC_ON_STARTUP
 	    #ifdef RDKSHELL_DUAL_FTA_SUPPORT
             char* factoryAppUrl = NULL;
             if (parameters.HasLabel("factoryappstage"))
@@ -5809,6 +5817,7 @@ namespace WPEFramework {
             #else
              char* factoryAppUrl = getenv("RDKSHELL_FACTORY_APP_URL");
             #endif
+	    #endif
             if (NULL != factoryAppUrl)
             {
                 if (parameters.HasLabel("resetagingtime"))
