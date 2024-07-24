@@ -5817,6 +5817,8 @@ namespace WPEFramework {
             #else
              char* factoryAppUrl = getenv("RDKSHELL_FACTORY_APP_URL");
             #endif
+	    #else
+             char* factoryAppUrl = getenv("RDKSHELL_FACTORY_APP_URL");
 	    #endif
             if (NULL != factoryAppUrl)
             {
